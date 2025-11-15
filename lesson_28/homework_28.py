@@ -1,4 +1,5 @@
 import pytest
+from playwright.sync_api import expect
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,13 +97,17 @@ def invalid_registration(open_main_page, main_page, registration_form, already_e
 def test_valid_registration(valid_registration, registration_form):
     driver = valid_registration
 
-    WebDriverWait(driver, 10).until(
+    expected = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(registration_form.success_register)
     )
+
+    assert expected.is_displayed(), "Process register not success"
 
 
 def test_error_user_already_exist(invalid_registration, registration_form):
     driver = invalid_registration
-    WebDriverWait(driver, 10).until(
+    expected = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located(registration_form.error_already_exist)
     )
+
+    assert expected.is_displayed(), "Process test not such as expected"
